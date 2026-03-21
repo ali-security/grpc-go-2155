@@ -36,11 +36,13 @@ echo "Executing: go install google.golang.org/protobuf/cmd/protoc-gen-go..."
 echo "Executing: go install cmd/protoc-gen-go-grpc..."
 (cd cmd/protoc-gen-go-grpc && go install .)
 
-echo "Pulling protos from https://github.com/grpc/grpc-proto..."
+GRPC_PROTO_VERSION="23f5b568eefcb876e6ebc3b01725f1f20cff999e"
+echo "Pulling protos from https://github.com/grpc/grpc-proto at ${GRPC_PROTO_VERSION}..."
 if [ -d "${WORKDIR}/grpc-proto" ]; then
-  (cd "${WORKDIR}/grpc-proto" && git pull)
+  (cd "${WORKDIR}/grpc-proto" && git fetch && git checkout ${GRPC_PROTO_VERSION})
 else
   git clone --quiet https://github.com/grpc/grpc-proto "${WORKDIR}/grpc-proto"
+  (cd "${WORKDIR}/grpc-proto" && git checkout ${GRPC_PROTO_VERSION})
 fi
 
 echo "Pulling protos from https://github.com/protocolbuffers/protobuf..."
